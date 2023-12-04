@@ -7,7 +7,7 @@ import pandas as pd
 #defining a function to reaf file name as argument and read dataframe in world bank format.
 def file_name(file) :
     #reading all files
-    agriculture_land = pd.read_csv("API_AG.LND.AGRI.ZS_DS2_en_csv_v2_5995314.csv", skiprows= 3)
+    agriculture_land = pd.read_csv("API_AG.LND.AGRI.ZS_DS2_en_csv_v2_5995314.csv", skiprows= 3, usecols=["Country Name","2000","2001","2002","2003","2004"])
     forest_area = pd.read_csv("API_AG.LND.FRST.ZS_DS2_en_csv_v2_5994693.csv", skiprows= 3)
     Nuclear_energy = pd.read_csv("API_EG.ELC.NUCL.ZS_DS2_en_csv_v2_5995539.csv", skiprows= 3)
     oil_electricity = pd.read_csv("API_EG.ELC.PETR.ZS_DS2_en_csv_v2_5995543.csv", skiprows= 3)
@@ -17,7 +17,10 @@ def file_name(file) :
     urban_population = pd.read_csv("API_SP.URB.TOTL_DS2_en_csv_v2_5996761.csv", skiprows= 3)
     
     #cleaning data
-    agriculture_land_clean = agriculture_land.loc[agriculture_land["China"]]
+    countires = ["China", "India", "Russian Federation", "United States"]
+   
+    
+    cleaned_agriculture = agriculture_land[agriculture_land["Country Name"].isin(countires)]
     
     
     #transposing all dataframes.
@@ -40,7 +43,7 @@ def file_name(file) :
     index_mortality = mortality_rate_transpose.iloc[0]
     index_urban = urban_population_transpose.iloc[0]
     
-    #rmoving first row
+    #removing first row
     agriculture_land_transpose = agriculture_land_transpose[1:]
     forest_area_transpose = forest_area_transpose[1:]
     Nuclear_energy_transpose = Nuclear_energy_transpose[1:]
@@ -99,15 +102,17 @@ def file_name(file) :
     cr_mortality = mortality_rate_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
     cr_urban = urban_population_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
     
-    return yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,agriculture_land_clean
+    return yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,cleaned_agriculture
     
     
     
-yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,agriculture_land_clean = file_name("file")
+yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,cleaned_agriculture = file_name("file")
    
     
 print(yr_agriculture.head())
 print(cr_agriculture.head())
-print(agriculture_land_clean)
+print(cleaned_agriculture)
+print(cr_oil.head())
+
     
     
