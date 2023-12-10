@@ -7,112 +7,127 @@ import pandas as pd
 #defining a function to reaf file name as argument and read dataframe in world bank format.
 def file_name(file) :
     #reading all files
-    agriculture_land = pd.read_csv("API_AG.LND.AGRI.ZS_DS2_en_csv_v2_5995314.csv", skiprows= 3, usecols=["Country Name","2000","2001","2002","2003","2004"])
-    forest_area = pd.read_csv("API_AG.LND.FRST.ZS_DS2_en_csv_v2_5994693.csv", skiprows= 3)
-    Nuclear_energy = pd.read_csv("API_EG.ELC.NUCL.ZS_DS2_en_csv_v2_5995539.csv", skiprows= 3)
-    oil_electricity = pd.read_csv("API_EG.ELC.PETR.ZS_DS2_en_csv_v2_5995543.csv", skiprows= 3)
-    renewable_enenrgy = pd.read_csv("API_EG.FEC.RNEW.ZS_DS2_en_csv_v2_5995541.csv", skiprows= 3)
-    co2_emission = pd.read_csv("API_EN.ATM.CO2E.KT_DS2_en_csv_v2_5994970.csv", skiprows= 3)
-    mortality_rate = pd.read_csv("API_SH.DYN.MORT_DS2_en_csv_v2_5996359.csv", skiprows= 3)
-    urban_population = pd.read_csv("API_SP.URB.TOTL_DS2_en_csv_v2_5996761.csv", skiprows= 3)
+    wdf =     agriculture_land = pd.read_csv(file, skiprows= 3, 
+                                       usecols=["Country Name","1990","1991","1992","1993","1994",
+                                                "1995","1996","1997","1998","1999","2000","2001","2002",
+                                                "2003","2004","2005","2006","2007","2008",
+                                                "2009","2010","2011","2012","2013","2014",
+                                                "2015","2016","2017","2018","2019","2020"])
     
+    wdf.index = wdf["Country Name"]
+    wdf = agriculture_land.iloc[:,1:]
     #cleaning data
-    countires = ["China", "India", "Russian Federation", "United States"]
+    countires = ["France", "India", "Russian Federation", "Netherlands", "Hungary", "Germany", "Australia"]
+    cleaned_agriculture = wdf.loc[countires,:]
+    
+    #setting years as intengers
+    cleaned_agriculture.columns = cleaned_agriculture.columns.astype(int)
    
-    
-    cleaned_agriculture = agriculture_land[agriculture_land["Country Name"].isin(countires)]
-    
-    
-    #transposing all dataframes.
-    agriculture_land_transpose = agriculture_land.T
-    forest_area_transpose = forest_area.T
-    Nuclear_energy_transpose = Nuclear_energy.T
-    oil_electricity_transpose = oil_electricity.T
-    renewable_enenrgy_transpose = renewable_enenrgy.T
-    co2_emission_transpose = co2_emission.T
-    mortality_rate_transpose = mortality_rate.T
-    urban_population_transpose = urban_population.T
-    
-    #first column
-    index_agriculture = agriculture_land_transpose.iloc[0]
-    index_forest = forest_area_transpose.iloc[0]
-    index_nuclear = Nuclear_energy_transpose.iloc[0]
-    index_oil = oil_electricity_transpose.iloc[0]
-    index_renewable = renewable_enenrgy_transpose.iloc[0]
-    index_co2 = co2_emission_transpose.iloc[0]
-    index_mortality = mortality_rate_transpose.iloc[0]
-    index_urban = urban_population_transpose.iloc[0]
-    
-    #removing first row
-    agriculture_land_transpose = agriculture_land_transpose[1:]
-    forest_area_transpose = forest_area_transpose[1:]
-    Nuclear_energy_transpose = Nuclear_energy_transpose[1:]
-    oil_electricity_transpose = oil_electricity_transpose[1:]
-    renewable_enenrgy_transpose = renewable_enenrgy_transpose[1:]
-    co2_emission_transpose = co2_emission_transpose[1:]
-    mortality_rate_transpose = mortality_rate_transpose[1:]
-    urban_population_transpose = urban_population_transpose[1:]
-    
-    #setting new column 
-    agriculture_land_transpose.columns = index_agriculture
-    forest_area_transpose.columns = index_forest
-    Nuclear_energy_transpose.columns = index_nuclear
-    oil_electricity_transpose.columns = index_oil
-    renewable_enenrgy_transpose.columns = index_renewable
-    co2_emission_transpose.columns = index_co2
-    mortality_rate_transpose.columns = index_mortality
-    urban_population_transpose.columns = index_urban
-    
-    #reset the index
-    agriculture_land_transpose.reset_index(inplace = True)
-    forest_area_transpose.reset_index(inplace = True)
-    Nuclear_energy_transpose.reset_index(inplace = True)
-    oil_electricity_transpose.reset_index(inplace = True)
-    renewable_enenrgy_transpose.reset_index(inplace = True)
-    co2_emission_transpose.reset_index(inplace = True)
-    mortality_rate_transpose.reset_index(inplace = True)
-    urban_population_transpose.reset_index(inplace = True)
-    
-    # Rename the columns
-    agriculture_land_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    forest_area_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    Nuclear_energy_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    oil_electricity_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    renewable_enenrgy_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    co2_emission_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    mortality_rate_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    urban_population_transpose.rename(columns={'index': 'Country Name'}, inplace=True)
-    
     # Separate the data into two dataframes: one with years as columns and one with countries as columns
-    yr_agriculture = agriculture_land_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_forest = forest_area_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_nuclear = Nuclear_energy_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_oil = oil_electricity_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_renewabel = renewable_enenrgy_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_co2 = co2_emission_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_mortality = mortality_rate_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
-    yr_urban = urban_population_transpose.set_index('Country Name').apply(pd.to_numeric, errors='coerce')
+    yr_wdf = cleaned_agriculture.T
+    cr_wdf = cleaned_agriculture
+    return yr_wdf, cr_wdf
     
-    cr_agriculture = agriculture_land_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_forest = forest_area_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_nuclear = Nuclear_energy_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_oil = oil_electricity_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_renewable = renewable_enenrgy_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_co2 = co2_emission_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_mortality = mortality_rate_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
-    cr_urban = urban_population_transpose.set_index('Country Name').transpose().apply(pd.to_numeric, errors='coerce')
+def stats_functions(heading,yr_pop) :
+    print("========"+heading+"========")
+    print("--Describe--")
+    print(yr_pop.describe())
+    print("--Skewness--")
+    print(yr_pop.skew())
+    print("--Kurtosis--")
+    print(yr_pop.kurtosis())
+    print("--Median--")
+    print(yr_pop.median())
+    plt.show()
     
-    return yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,cleaned_agriculture
+def plot_line(df,title,y):
+    plt.figure()
     
+    plt.plot(df.index, df["France"])
+    plt.plot(df.index, df["India"])
+    plt.plot(df.index, df["Hungary"])
+    plt.plot(df.index, df["Netherlands"])
+    plt.plot(df.index, df["Australia"])
+    plt.plot(df.index, df["Germany"])
     
+    plt.legend(["France", "India", "Hungary", "Netherlands", "Australia","Germany"],loc="center left", bbox_to_anchor=(1, 0.5))
+    plt.ylabel(y)
+    plt.title(title)
+    plt.show()
+
+def bar_plot(df,xlbl,ylbl,title) :
     
-yr_agriculture,yr_forest,yr_nuclear,yr_oil,yr_renewabel,yr_co2,yr_mortality,yr_urban,cr_agriculture,cr_forest,cr_nuclear,cr_oil,cr_renewable,cr_co2,cr_mortality,cr_urban,cleaned_agriculture = file_name("file")
+    years = [1990, 1995, 2000, 2005, 2010, 2015, 2020]
    
+    df_filter = df.loc[years,:]
+    print(df_filter)
+    plt.figure()
     
-print(yr_agriculture.head())
-print(cr_agriculture.head())
-print(cleaned_agriculture)
-print(cr_oil.head())
+    x = np.arange(len(df_filter.columns))
+    
+    width = 0.1
+    multiplier = 0
+    
+    fig, ax = plt.subplots(layout = 'constrained')
+    
+    for i in df_filter.index:
+        offset = width * multiplier
+        reacts = ax.bar(x + offset, df_filter.loc[i].values.flatten(), width,label = i )
+        multiplier = multiplier + 1
+    
+    ax.set_xlabel(xlbl)
+    ax.set_ylabel(ylbl)
+    ax.set_title(title)
+    ax.set_xticks(x + width, df_filter.columns)
+    ax.legend()
+    
+    plt.show()
+    
+def heat_map(countires, cr_agriculture, cr_forest, cr_co2, cr_pop, cr_energy, yr_mortality,cmap) :
+    cor = pd.DataFrame()
+    cor["Agriculture"] = cr_agriculture.loc[countires,:].values
+    cor["forest"] = cr_forest.loc[countires,:].values
+    cor["co2"] = cr_co2.loc[countires,:].values
+    cor["urban population"] = cr_pop.loc[countires,:].values
+    cor["Renewable Energy"] = cr_energy.loc[countires,:].values
+    cor["Mortality rate"] = yr_mortality.loc[countires,:].values
+    
+    cor = cor.corr().round(3)
+    print(cor)
+    plt.figure()
+    plt.imshow(cor, cmap=cmap)
+    plt.colorbar()
+    plt.xticks(np.arange(len(cor.columns)), labels = cor.columns, rotation = 90)
+    plt.yticks(np.arange(len(cor.columns)), labels = cor.columns)
+    
+    plt.title(countires)
+    for (i, j), r in np.ndenumerate(cor):
+        plt.text(i, j, r, ha = "center", va = "center")
+        
+    plt.show()
+    
+        
+def print_all_line():
+    plot_line(yr_agriculture,"Agriculture land  graph","Percentage of land")
+    plot_line(yr_forest,"Forest land graph","Percentage of land")
+
+######Main##########
+yr_agriculture, cr_agriculture = file_name("API_AG.LND.AGRI.ZS_DS2_en_csv_v2_5995314.csv")
+yr_forest, cr_forest = file_name("API_AG.LND.FRST.ZS_DS2_en_csv_v2_5994693.csv")
+yr_co2,cr_co2 = file_name("API_EN.ATM.CO2E.KT_DS2_en_csv_v2_5994970.csv")
+yr_pop,cr_pop = file_name("API_SP.URB.TOTL_DS2_en_csv_v2_5996761.csv")
+yr_energy,cr_energy = file_name("API_EG.FEC.RNEW.ZS_DS2_en_csv_v2_5995541.csv")
+yr_mortality,yr_mortality = file_name("API_SH.DYN.MORT_DS2_en_csv_v2_5996359.csv")
+
+stats_functions("yr_agriculture",yr_agriculture)
+stats_functions("yr_forest",yr_forest)
+print_all_line()
+bar_plot(yr_co2,"Years", "Co2 emission", "co2 emission by countries by year")
+bar_plot(yr_energy,"Years", "Renewable enegry", "Renewable enegry by year")
+heat_map("India", cr_agriculture, cr_forest, cr_co2, cr_pop, cr_energy, yr_mortality, "plasma")
+heat_map("Germany", cr_agriculture, cr_forest, cr_co2, cr_pop, cr_energy, yr_mortality, "Oranges")
+
+plt.show()
 
     
-    
+
