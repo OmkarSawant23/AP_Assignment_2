@@ -206,17 +206,17 @@ def heat_map(countires, cr_1, cr_2, cr_3, cr_4, cr_5,
     ----------
     countires : TYPE
         Name of the countries.
-    cr_agriculture : TYPE
+    cr_1 : TYPE
         This is a pandas dataframe.
-    cr_forest : TYPE
+    cr_2 : TYPE
        This is a pandas dataframe.
-    cr_co2 : TYPE
+    cr_3 : TYPE
         This is a pandas dataframe.
-    cr_pop : TYPE
+    cr_4 : TYPE
         This is a pandas dataframe.
-    cr_energy : TYPE
+    cr_5 : TYPE
         This is a pandas dataframe.
-    yr_mortality : TYPE
+    cr_6 : TYPE
         This is a pandas dataframe.
     cmap : TYPE
         colourmap.
