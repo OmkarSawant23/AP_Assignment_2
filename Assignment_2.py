@@ -40,7 +40,7 @@ def file_name(file):
     wdf = agriculture_land.iloc[:, 1:]
 
     # filtering data.
-    countires = ["France", "India","Netherlands",
+    countires = ["France", "India", "Netherlands",
                  "Hungary", "Germany", "Australia"]
     cleaned_agriculture = wdf.loc[countires, :]
 
@@ -88,7 +88,7 @@ def stats_functions(heading, df_stats):
     # Using Kurtosis Method.
     print("**********Kurtosis**********")
     krut = pd.DataFrame(st.kurtosis(df_stats),
-                        index=df_stats.columns,columns=[""])
+                        index=df_stats.columns, columns=[""])
     print(krut)
 
     # Using Median Method.
@@ -286,7 +286,8 @@ def print_all_bar():
     '''
     bar_plot(yr_co2, "Countries", "Co2 emission",
              "co2 emission by countries by year")
-    bar_plot(yr_pop, "Countries", "Urban Population", "Urban population by year")
+    bar_plot(yr_pop, "Countries", "Urban Population",
+             "Urban population by year")
 
 
 def print_all_heat():
