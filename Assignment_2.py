@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import scipy.stats as st
 
 
 def file_name(file):
@@ -39,7 +40,7 @@ def file_name(file):
     wdf = agriculture_land.iloc[:, 1:]
 
     # filtering data.
-    countires = ["France", "India", "Russian Federation", "Netherlands",
+    countires = ["France", "India","Netherlands",
                  "Hungary", "Germany", "Australia"]
     cleaned_agriculture = wdf.loc[countires, :]
 
@@ -80,11 +81,15 @@ def stats_functions(heading, df_stats):
 
     # Using Skewness Method.
     print("**********Skewness**********")
-    print(df_stats.skew())
+    skw = pd.DataFrame(st.skew(df_stats),
+                       index=df_stats.columns, columns=[""])
+    print(skw)
 
     # Using Kurtosis Method.
     print("**********Kurtosis**********")
-    print(df_stats.kurtosis())
+    krut = pd.DataFrame(st.kurtosis(df_stats),
+                        index=df_stats.columns,columns=[""])
+    print(krut)
 
     # Using Median Method.
     print("**********Median**********")
@@ -265,7 +270,7 @@ def print_all_line():
     None.
 
     '''
-    plot_line(yr_agriculture, "Agriculture land  graph", "Years",
+    plot_line(yr_agriculture, "Agriculture land graph", "Years",
               "Percentage of land")
     plot_line(yr_forest, "Forest land graph", "Years", "Percentage of land")
 
@@ -279,9 +284,9 @@ def print_all_bar():
     None.
 
     '''
-    bar_plot(yr_co2, "Years", "Co2 emission",
+    bar_plot(yr_co2, "Countries", "Co2 emission",
              "co2 emission by countries by year")
-    bar_plot(yr_pop, "Years", "Urban Population", "Urban population by year")
+    bar_plot(yr_pop, "Countries", "Urban Population", "Urban population by year")
 
 
 def print_all_heat():
